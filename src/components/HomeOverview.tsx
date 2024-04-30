@@ -1,7 +1,4 @@
-import { useState } from "react";
-import { Sorter } from "./gallery/Sorter";
-
-const username = "ApeLover69";
+const username = "NftMaster";
 
 const HomeOverview = () => {
   return (
