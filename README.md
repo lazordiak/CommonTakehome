@@ -74,7 +74,11 @@ In summary, going forward there are three areas for me to tackle:
 
 ## Video Demo
 
+Here are video demos for mobile and dekstop.
+
 [![Video Thumbnail](https://img.youtube.com/vi/ZrTNJwWfyEw/0.jpg)](https://www.youtube.com/watch?v=ZrTNJwWfyEw)
+
+[![Video Thumbnail](https://img.youtube.com/vi/TOYjiiQLE5g/0.jpg)](https://www.youtube.com/watch?v=TOYjiiQLE5g)
 
 ## Deploy on Vercel
 
