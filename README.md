@@ -72,6 +72,10 @@ In summary, going forward there are three areas for me to tackle:
 - UI improvement (framer motion and better standardizing UI components)
 - The smart contract
 
+## Video Demo
+
+[![Video Thumbnail](https://www.youtube.com/watch?v=ZrTNJwWfyEw)
+
 ## Deploy on Vercel
 
 ^ This is also boilerplate. This is not deployed on Vercel, though I could deploy it! My personal site is deployed on Vercel, they're not bad!
