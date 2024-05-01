@@ -42,13 +42,15 @@ export default function UserProfile() {
         );
         console.log("the tx");
         console.log({ ...userData });
-        setUser({
-          name: userData.name,
-          email: userData.email,
-          postalAddress: userData.postalAddress,
-          username: userData.username,
-          id: userData.id,
-        });
+        if (userData.name && userData.email) {
+          setUser({
+            name: userData.name,
+            email: userData.email,
+            postalAddress: userData.postalAddress,
+            username: userData.username,
+            id: userData.id,
+          });
+        }
       };
       getUser();
     } catch (err) {
@@ -60,11 +62,11 @@ export default function UserProfile() {
   }, []);
 
   const [user, setUser] = useState<User>({
-    id: "",
-    name: "",
-    email: "",
-    postalAddress: "",
-    username: "",
+    id: "GNiYe02UG4QXG4ZG4fGW",
+    name: "Sky deVos",
+    email: "schuylerdevos@gmail.com",
+    postalAddress: "666 West 14th St",
+    username: "Sky",
   });
 
   const [bio, setBio] = useState(
