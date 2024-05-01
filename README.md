@@ -16,7 +16,17 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-^ This is obviously the boilerplate README, but it still holds so I will keep it!
+To run the Hardhat test network (necessary to run the smart contract):
+Open a new command window
+cd hardhat 
+npx hardhat compile
+npx hardhat node
+
+In a third window
+cd hardhat 
+npx hardhat ignition deploy ./ignition/modules/UserInfo.ts --network localhost
+
+This should start a node on the hardhat test network and launch the smart contract.
 
 ## Inspiration and First Steps
 
@@ -50,12 +60,14 @@ There is a gallery, and it does display a collection of NFTs that can be sorted 
 There is a small forum where one can post and view other topics of discussion.
 There is a page where one can view meetups and projects based around NFTs, and one can click into the projects to see details. Clicking the 'attend event' button will open an email prompt to the email of whoever is organizing the event.
 There is a profile page where one can edit one's bio and user details.
+# Update: The profile page user details edit feature now uses a smart contract
+The smart contract:
+- Fetches data from the chain on load
+- Updates the data with edited user details (but not bio, currently)
 
 ## Challenges and what's not finished
 
-Most obviously, the smart contract that I bootrstrapped with HardHat is still boilerplate. When I started building the app and looking into smart contracts, I saw I had to get a MetaMask wallet and buy ETH in order to get crypto from the Sepolia faucet to use the testnet. I decided then that I'd save the smart contract for last, because I knew how to implement the other parts of the app, so it wouldn't take as long and I had a greater chance of getting everything finished.
-
-When I came back to set up the MetaMask account and get some ETH tonight, there were troubles with the payment processing, and service I used said there'd be a delay in getting the crypto to my account. I plan to come back to this section of the app tomorrow and work on it and look into it, if only so that I learn something new.
+Most obviously, the smart contract that I bootrstrapped with HardHat is still quite rudimentary.
 
 Aside from that, not everything is in Firebase -- there is still dummy data in the gallery section and the forum section. In addition, the user profile page only fetches data from the database -- changes you make to your user profile are not persisted through a refresh.
 
@@ -70,7 +82,7 @@ For data storage, I considered just using local storage rather than using a data
 In summary, going forward there are three areas for me to tackle:
 - security and authenthication, probably through Firebase, since I already have Firestore integrated.
 - UI improvement (framer motion and better standardizing UI components)
-- The smart contract
+- Expand on the smart contract
 
 ## Video Demo
 
