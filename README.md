@@ -17,14 +17,19 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 To run the Hardhat test network (necessary to run the smart contract):
+
 Open a new command window
+```bash
 cd hardhat 
 npx hardhat compile
 npx hardhat node
+```
 
 In a third window
+```bash
 cd hardhat 
 npx hardhat ignition deploy ./ignition/modules/UserInfo.ts --network localhost
+```
 
 This should start a node on the hardhat test network and launch the smart contract.
 
