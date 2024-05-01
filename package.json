@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "ethers": "^6.12.1",
     "firebase-admin": "^12.1.0",
     "framer-motion": "^11.1.7",
     "hamburger-react": "^2.5.0",

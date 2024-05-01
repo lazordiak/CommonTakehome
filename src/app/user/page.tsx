@@ -1,12 +1,25 @@
 "use client";
 
 import { PrimaryButton } from "@/components/buttons/PrimaryButton";
+import { InfoField } from "@/components/user/InfoField";
 import { User } from "@/types/types";
+import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import { FadeLoader } from "react-spinners";
+import contractInfo from "../../../hardhat/artifacts/contracts/UserInfo.sol/UserInfo.json";
+import { Contract } from "ethers";
 
 export default function UserProfile() {
   useEffect(() => {
+    const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+    const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    const privateKey =
+      "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+    const signer = new ethers.Wallet(privateKey, provider);
+    const contractABI = contractInfo.abi;
+    const contract = new ethers.Contract(contractAddress, contractABI, signer);
+    setContract(contract);
+
     const getData = async () => {
       try {
         const res = await fetch("/api/user");
@@ -19,19 +32,82 @@ export default function UserProfile() {
         setUser(rest);
       } catch (err) {
         console.error(err);
-      } finally {
-        setLoading(false);
       }
     };
-    getData();
+
+    try {
+      const getUser = async () => {
+        const userData = await contract.getUser(
+          "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"
+        );
+        console.log("the tx");
+        console.log({ ...userData });
+        setUser({
+          name: userData.name,
+          email: userData.email,
+          postalAddress: userData.postalAddress,
+          username: userData.username,
+          id: userData.id,
+        });
+      };
+      getUser();
+    } catch (err) {
+      console.error(err);
+      getData();
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const [error, setError] = useState<any>("");
-  const [user, setUser] = useState<User | null>(null);
-  const [bio, setBio] = useState<string>("");
+  const [user, setUser] = useState<User>({
+    id: "",
+    name: "",
+    email: "",
+    postalAddress: "",
+    username: "",
+  });
+
+  const [bio, setBio] = useState(
+    "Schuyler deVos is a German filmmaker, actor, opera director, and author. Regarded as a pioneer of New German Cinema, his films often feature ambitious protagonists with impossible dreams, people with unusual talents in obscure fields, or individuals in conflict with nature. His style involves avoiding storyboards, emphasizing improvisation, and placing his cast and crew into real situations mirroring those in the film they are working on."
+  );
   const [editingAcct, setEditingAcct] = useState(false);
   const [editingBio, setEditingBio] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [contract, setContract] = useState<Contract | null>(null);
+
+  const [transacting, setTransacting] = useState(false);
+  const [txHash, setTxHash] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUser((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleUpdateUser = async () => {
+    if (contract) {
+      setTransacting(true);
+
+      try {
+        const tx = await contract.setUser(
+          user.id,
+          user.name,
+          user.email,
+          user.postalAddress,
+          user.username
+        );
+        await tx.wait();
+
+        setTxHash(tx.hash);
+      } catch (error) {
+        console.error("Error updating user:", error);
+      } finally {
+        setTransacting(false);
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -40,6 +116,7 @@ export default function UserProfile() {
       </div>
     );
   }
+
   return (
     <div className="lg:h-screen">
       {user && (
@@ -77,63 +154,60 @@ export default function UserProfile() {
               Account Information
             </h1>
             <div className="grid gap-4 text-lg mb-12 lg:mb-0">
-              <div className="flex flex-col lg:flex-row justify-between">
-                <input
-                  className={
-                    "flex-2 border-b border-1-black rounded border " +
-                    `${editingAcct ? "bg-slate-100 " : "bg-white"}`
-                  }
-                  defaultValue={user.username}
-                  disabled={!editingAcct}
-                ></input>
-                <p className="font-semibold flex-1 lg:text-end">Username</p>
-              </div>
-              <div className="flex flex-col lg:flex-row justify-between">
-                <input
-                  className={
-                    "flex-2 border-b border-1-black rounded border " +
-                    `${editingAcct ? "bg-slate-100 " : "bg-white"}`
-                  }
-                  defaultValue={user.name}
-                  disabled={!editingAcct}
-                ></input>
-                <p className="font-semibold flex-1 lg:text-end">Name</p>
-              </div>
-              <div className="flex flex-col lg:flex-row justify-between">
-                <input
-                  className={
-                    "flex-2 border-b border-1-black rounded border " +
-                    `${editingAcct ? "bg-slate-100 " : "bg-white"}`
-                  }
-                  defaultValue={user.email}
-                  disabled={!editingAcct}
-                ></input>
-                <p className="font-semibold flex-1 lg:text-end">Email</p>
-              </div>
-              <div className="flex flex-col lg:flex-row justify-between">
-                <input
-                  className={
-                    "flex-2 border-b border-1-black rounded border " +
-                    `${editingAcct ? "bg-slate-100" : "bg-white"}`
-                  }
-                  defaultValue={user.address}
-                  disabled={!editingAcct}
-                ></input>
-                <p className="font-semibold flex-1 lg:text-end">Address</p>
-              </div>
-            </div>
-            <div className="w-full mb-12 lg:mb-0">
-              <PrimaryButton
-                onClick={() => {
-                  setEditingAcct(!editingAcct);
-                }}
-                text={
-                  editingAcct
-                    ? "Save Account Information"
-                    : "Edit Account Information"
-                }
+              <InfoField
+                formName="username"
+                editingAcct={editingAcct}
+                handleChange={handleChange}
+                value={user.username}
+                title="Username"
+              />
+              <InfoField
+                formName="name"
+                editingAcct={editingAcct}
+                handleChange={handleChange}
+                value={user.name}
+                title="Name"
+              />
+              <InfoField
+                formName="email"
+                editingAcct={editingAcct}
+                handleChange={handleChange}
+                value={user.email}
+                title="Email"
+              />
+              <InfoField
+                formName="postalAddress"
+                editingAcct={editingAcct}
+                handleChange={handleChange}
+                value={user.postalAddress}
+                title="Address"
               />
             </div>
+            {transacting ? (
+              <div>Data is being hashed...</div>
+            ) : (
+              <div className="w-full mb-24 lg:mb-0">
+                <PrimaryButton
+                  onClick={() => {
+                    if (editingAcct) {
+                      handleUpdateUser();
+                    }
+                    setEditingAcct(!editingAcct);
+                  }}
+                  text={
+                    editingAcct
+                      ? "Save Account Information"
+                      : "Edit Account Information"
+                  }
+                />
+                {txHash && (
+                  <div className="absolute break-all lg:pr-12">
+                    <p>Data successfully updated!</p>
+                    <p>Transaction hash is: {txHash}</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
