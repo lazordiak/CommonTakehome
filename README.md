@@ -83,3 +83,8 @@ Here are video demos for mobile and dekstop.
 ## Deploy on Vercel
 
 ^ This is also boilerplate. This is not deployed on Vercel, though I could deploy it! My personal site is deployed on Vercel, they're not bad!
+
+## Update 5/1/2024
+
+I continued working on this today and got a rudimentary smart contract up and running to update and fetch user details on the users page. The smart contract runs on HardHat's test network and requires some additional setup.
+In the interest of fairness (since this was due yesterday) I've pushed it to a separate branch and will leave it there if you want to see it!
