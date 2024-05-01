@@ -74,7 +74,7 @@ In summary, going forward there are three areas for me to tackle:
 
 ## Video Demo
 
-[![Video Thumbnail](https://www.youtube.com/watch?v=ZrTNJwWfyEw)
+[![Video Thumbnail](https://img.youtube.com/vi/ZrTNJwWfyEw/0.jpg)](https://www.youtube.com/watch?v=ZrTNJwWfyEw)
 
 ## Deploy on Vercel
 
