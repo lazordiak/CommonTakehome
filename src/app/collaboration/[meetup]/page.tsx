@@ -21,7 +21,7 @@ export default function Page() {
       </div>
       <div className="flex flex-col lg:flex-row">
         <div className="flex flex-2 flex-col">
-          <div className="object-cover">
+          <div className="lg:w-1/2">
             <img
               alt="A picture of happy people talking about blockchain"
               src={
